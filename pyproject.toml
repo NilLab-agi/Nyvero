@@ -1,0 +1,13 @@
+[project]
+name = "nyvero"
+version = "0.1.0"
+description = "A minimal coding agent harness"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+nyvero = "nyvero.main:main"
+
+[tool.uv]
+package = true
