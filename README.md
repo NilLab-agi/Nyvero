@@ -84,7 +84,14 @@ Built incrementally, one concept at a time:
 
 ## Setup
 
-Requires Python 3.12+ and [uv](https://docs.astral.sh/uv/).
+Requires Python 3.12+ and [uv](https://docs.astral.sh/uv/). If you do not have uv
+installed yet, install it first:
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Then clone the repository and install the dependencies:
 
 ```bash
 git clone https://github.com/NilLab-agi/Nyvero.git
