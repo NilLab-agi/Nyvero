@@ -4,10 +4,14 @@ version = "0.1.0"
 description = "A minimal coding agent harness"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "openai",
+    "python-dotenv",
+]
 
 [project.scripts]
-nyvero = "nyvero.main:main"
+nyvero = "nyvero.agent:main"
 
-[tool.uv]
-package = true
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
