@@ -49,7 +49,7 @@ loops again until the model responds without requesting a tool.
 * Python 3.12+
 * [uv](https://docs.astral.sh/uv/) for environments and dependency management
 * OpenRouter as the model provider (OpenAI-compatible API)
-* OpenAI Python SDK as the OpenRouter-compatible client
+* [OpenRouter Python SDK](https://openrouter.ai/docs/sdks/python) as the model client
 * python-dotenv for loading credentials from `.env`
 
 ## Current status
@@ -58,10 +58,11 @@ Early, and intentionally so. What is in place today:
 
 * Package layout (`nyvero/`) with a working CLI entry point
 * A `nyvero` console script that runs and prints a banner
+* An LLM client (`llm.py`) that reaches OpenRouter through the OpenRouter Python SDK
 
-What is not built yet: the LLM client, the agent loop, tool calling, and every tool.
-`agent.py` and `llm.py` are empty placeholders, and no third-party dependencies are
-declared in `pyproject.toml` yet. Nyvero does not talk to a model at this stage.
+What is not built yet: the agent loop, tool calling, and every tool. `agent.py` and the
+remaining modules are empty placeholders, so Nyvero can talk to a model but cannot yet
+call a tool or act on its own.
 
 ## Roadmap
 
@@ -113,14 +114,22 @@ Nyvero
 
 ### Configuration
 
-Once the LLM client lands, an OpenRouter API key will be read from the environment:
+Copy `.env.example` to `.env` and add your OpenRouter key:
+
+```bash
+cp .env.example .env
+```
 
 ```bash
 # .env
-OPENROUTER_API_KEY=your-key-here
+OPENROUTER_API_KEY=sk-or-v1-your-key-here
+OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
+MODEL=liquid/lfm-2.5-2.6b:free
 ```
 
-This is not wired up yet — Nyvero does not make any API calls in its current state.
+`config.py` loads `.env` from the repository root and fails fast when the key is missing
+or does not look like an OpenRouter key. A key exported in your shell overrides the file,
+so keep the real key in `.env` only.
 
 ## Note
 
