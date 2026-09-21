@@ -1,8 +1,7 @@
 import json
 
 from .llm import call_llm
-from .tools import BASH_TOOL, bash
-
+from .tools import BASH_TOOL, execute_tool
 
 def main():
     user_input = input("You: ")
@@ -34,10 +33,10 @@ def main():
                 tool_call.function.arguments
             )
 
-            if name == "bash":
-                result = bash(**arguments)
-            else:
-                result = f"Unknown tool: {name}"
+            result = execute_tool(
+                    name,
+                    arguments,
+            )
 
             messages.append({
                 "role": "tool",

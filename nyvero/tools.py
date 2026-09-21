@@ -26,3 +26,15 @@ BASH_TOOL = {
         },
     },
 }
+
+TOOLS =  {
+    "bash": bash
+}
+
+def execute_tool(name: str, arguments: dict) -> str:
+    tool = TOOLS.get(name)
+
+    if tool is None:
+        return f"Unknown tool: {name}"
+
+    return tool(**arguments)
