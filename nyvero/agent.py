@@ -1,7 +1,11 @@
 import json
 
 from .llm import call_llm
-from .tools import BASH_TOOL, execute_tool
+from .tools import (
+    BASH_TOOL,
+    READ_FILE_TOOL,
+    execute_tool,
+)
 
 def main():
     user_input = input("You: ")
@@ -16,7 +20,10 @@ def main():
     while True:
         message = call_llm(
             messages,
-            tools=[BASH_TOOL],
+            tools=[
+                BASH_TOOL,
+                READ_FILE_TOOL,
+            ],
         )
 
         messages.append(

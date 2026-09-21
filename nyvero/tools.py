@@ -9,6 +9,10 @@ def bash(command: str) -> str:
     )
     return results.stdout + results.stderr
 
+def read_file(path: str) -> str:
+    with open(path, "r", encoding="utf-8") as file:
+        return file.read()
+
 BASH_TOOL = {
     "type": "function",
     "function": {
@@ -27,8 +31,27 @@ BASH_TOOL = {
     },
 }
 
+READ_FILE_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "read_file",
+        "description": "Read the contents of a text file.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "description": "Path to the file to read.",
+                }
+            },
+            "required": ["path"],
+        },
+    },
+}
+
 TOOLS =  {
-    "bash": bash
+    "bash": bash,
+    "read_file": read_file,
 }
 
 def execute_tool(name: str, arguments: dict) -> str:
