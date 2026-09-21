@@ -13,6 +13,13 @@ def read_file(path: str) -> str:
     with open(path, "r", encoding="utf-8") as file:
         return file.read()
 
+def write_file(path: str, content: str) -> str:
+    with open(path, "w", encoding="utf-8") as file:
+        file.write(content)
+
+    return f"Successfully wrote to {path}"
+
+
 BASH_TOOL = {
     "type": "function",
     "function": {
@@ -49,9 +56,32 @@ READ_FILE_TOOL = {
     },
 }
 
+WRITE_FILE_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "write_file",
+        "description": "Write content to a file, replacing the file if it already exists",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "description": "Path to the file to write",
+                },
+                "content": {
+                    "type": "string",
+                    "description": "Complete content to write to the file",
+                }
+            },
+            "required": ["path", "content"],
+        }
+    }
+}
+
 TOOLS =  {
     "bash": bash,
     "read_file": read_file,
+    "write_file": write_file,
 }
 
 def execute_tool(name: str, arguments: dict) -> str:

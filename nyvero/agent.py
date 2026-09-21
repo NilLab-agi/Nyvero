@@ -4,6 +4,7 @@ from .llm import call_llm
 from .tools import (
     BASH_TOOL,
     READ_FILE_TOOL,
+    WRITE_FILE_TOOL,
     execute_tool,
 )
 
@@ -23,6 +24,7 @@ def main():
             tools=[
                 BASH_TOOL,
                 READ_FILE_TOOL,
+                WRITE_FILE_TOOL,
             ],
         )
 
