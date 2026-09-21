@@ -8,10 +8,11 @@ client = OpenAI(
     base_url=config.DEEPSEEK_BASE_URL
 )
 
-def call_llm(messages):
+def call_llm(messages, tools=None):
     response = client.chat.completions.create(
         model=config.MODEL,
         messages=messages,
+        tools=tools,
         reasoning_effort=config.REASONING_EFFORT,
         extra_body={
             "thinking": {

@@ -1,5 +1,7 @@
-# The actual agent loop
+import json
+
 from .llm import call_llm
+from .tools import BASH_TOOL, bash
 
 
 def main():
@@ -12,9 +14,36 @@ def main():
         }
     ]
 
-    message = call_llm(messages)
+    while True:
+        message = call_llm(
+            messages,
+            tools=[BASH_TOOL],
+        )
 
-    print(f"\nNyvero: {message.content}")
+        messages.append(
+            message.model_dump(exclude_none=True)
+        )
+
+        if not message.tool_calls:
+            print(f"\nNyvero: {message.content}")
+            break
+
+        for tool_call in message.tool_calls:
+            name = tool_call.function.name
+            arguments = json.loads(
+                tool_call.function.arguments
+            )
+
+            if name == "bash":
+                result = bash(**arguments)
+            else:
+                result = f"Unknown tool: {name}"
+
+            messages.append({
+                "role": "tool",
+                "tool_call_id": tool_call.id,
+                "content": result,
+            })
 
 
 if __name__ == "__main__":
