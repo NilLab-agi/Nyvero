@@ -1,6 +1,6 @@
 import json
 
-from .llm import call_llm
+from .llm import stream_llm, collect_stream
 from .tools import (
     BASH_TOOL,
     READ_FILE_TOOL,
@@ -40,50 +40,92 @@ def main():
             "content": user_input,
         })
 
-        message = call_llm(
-            messages,
-            tools=[
-                BASH_TOOL,
-                READ_FILE_TOOL,
-                WRITE_FILE_TOOL,
-                LIST_FILES_TOOL,
-                FILE_EXISTS_TOOL,
-                DELETE_FILE_TOOL,
-                EDIT_FILE_TOOL,
-            ],
-        )
+        # message = call_llm(
+        #     messages,
+        #     tools=[
+        #         BASH_TOOL,
+        #         READ_FILE_TOOL,
+        #         WRITE_FILE_TOOL,
+        #         LIST_FILES_TOOL,
+        #         FILE_EXISTS_TOOL,
+        #         DELETE_FILE_TOOL,
+        #         EDIT_FILE_TOOL,
+        #     ],
+        # )
+        while True:
+            print("\nNyvero: ", end="", flush=True)
 
-        messages.append(
-            message.model_dump(exclude_none=True)
-        )
-
-        if not message.tool_calls:
-            show_message(f"{message.content}")
-            break
-
-        for tool_call in message.tool_calls:
-            name = tool_call.function.name
-            arguments = json.loads(
-                tool_call.function.arguments
+            stream = stream_llm(
+                messages,
+                tools=[
+                    BASH_TOOL,
+                    READ_FILE_TOOL,
+                    WRITE_FILE_TOOL,
+                    LIST_FILES_TOOL,
+                    FILE_EXISTS_TOOL,
+                    DELETE_FILE_TOOL,
+                    EDIT_FILE_TOOL,
+                ],
             )
 
-            show_tool_call(name, arguments)
-            try:
-                result = execute_tool(
+            result = collect_stream(stream)
+            print()
+
+            if not result["tool_calls"]:
+                break
+
+            assistant_message = {
+                "role": "assistant",
+                "content": result["content"],
+            }
+
+            if result["reasoning_content"]:
+                assistant_message["reasoning_content"] = (
+                    result["reasoning_content"]
+                )
+            
+            if result["tool_calls"]:
+                assistant_message["tool_calls"] = []
+
+                for index, tool_call in enumerate(result["tool_calls"]):
+                    assistant_message["tool_calls"].append({
+                        "id": tool_call["id"],
+                        "type": "function",
+                        "function": {
+                            "name": tool_call["name"],
+                            "arguments": tool_call["arguments"],
+                        },
+                    })
+            messages.append(assistant_message)
+
+            for tool_call in result["tool_calls"]:
+                name = tool_call["name"]
+
+                arguments = json.loads(
+                    tool_call["arguments"]
+                )
+
+                show_tool_call(
                     name,
                     arguments,
                 )
-            except Exception as errors:
-                show_error(str(errors))
-                result = f"Tool execution failed: {errors}"
 
-            show_tool_result(result)
+                try:
+                    tool_result = execute_tool(
+                        name,
+                        arguments,
+                    )
+                except Exception as error:
+                    show_error(str(error))
+                    tool_result = f"Tool execution failed: {error}"
 
-            messages.append({
-                "role": "tool",
-                "tool_call_id": tool_call.id,
-                "content": result,
-            })
+                show_tool_result(tool_result)
+
+                messages.append({
+                    "role": "tool",
+                    "tool_call_id": tool_call["id"],
+                    "content": tool_result,
+                })
 
 
 if __name__ == "__main__":

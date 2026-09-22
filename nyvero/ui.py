@@ -36,3 +36,15 @@ def show_error(message: str) -> None:
 
 def show_goodbye() -> None:
     print("\nGoodbye!")
+
+def start_stram() -> None:
+    print("\nNyvero: ", end="", flush=True)
+
+def stream_text(text: str) -> None:
+    print(text, end="", flash=True)
+
+def end_stream() -> None:
+    print()
+
+def stream_message(text:str) -> None:
+    print(text, end="", flush=True)
