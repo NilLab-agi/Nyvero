@@ -57,6 +57,43 @@ def delete_file(path: str) -> str:
 
     return f"Succesfully deleted file: {path}"
 
+# Edit file tool
+
+def edit_file(
+    path: str,
+    old_text: str,
+    new_text: str,
+) -> str:
+    file_path = Path(path)
+
+    if not file_path.is_file():
+        return f"File does not exist: {path}"
+
+    content = file_path.read_text(encoding="utf-8")
+
+    count = content.count(old_text)
+
+    if count == 0:
+        return "Edit failed: old_text was not found."
+
+    if count > 1:
+        return (
+            f"Edit failed: old_text matched {count} times. "
+            "Provide more surrounding text to make the match unique."
+        )
+
+    updated_content = content.replace(
+        old_text,
+        new_text,
+        1,
+    )
+
+    file_path.write_text(
+        updated_content,
+        encoding="utf-8",
+    )
+
+    return f"Successfully edited {path}"
 
 BASH_TOOL = {
     "type": "function",
@@ -170,13 +207,52 @@ DELETE_FILE_TOOL = {
     },
 }
 
+EDIT_FILE_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "edit_file",
+        "description": (
+            "Edit an existing text file by replacing one exact, "
+            "unique block of text with new text."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "description": "Path of the file to edit.",
+                },
+                "old_text": {
+                    "type": "string",
+                    "description": (
+                        "Exact text currently present in the file. "
+                        "It must match exactly once."
+                    ),
+                },
+                "new_text": {
+                    "type": "string",
+                    "description": (
+                        "Replacement text."
+                    ),
+                },
+            },
+            "required": [
+                "path",
+                "old_text",
+                "new_text",
+            ],
+        },
+    },
+}
+
 TOOLS =  {
     "bash": bash,
     "read_file": read_file,
     "write_file": write_file,
     "list_files": list_files,
     "file_exists": file_exists,
-    "delete_file": delete_file, 
+    "delete_file": delete_file,
+    "edit_file": edit_file,
 }
 
 def execute_tool(name: str, arguments: dict) -> str:

@@ -8,6 +8,7 @@ from .tools import (
     LIST_FILES_TOOL,
     FILE_EXISTS_TOOL,
     DELETE_FILE_TOOL,
+    EDIT_FILE_TOOL,
     execute_tool,
 )
 
@@ -31,6 +32,7 @@ def main():
                 LIST_FILES_TOOL,
                 FILE_EXISTS_TOOL,
                 DELETE_FILE_TOOL,
+                EDIT_FILE_TOOL,
             ],
         )
 
