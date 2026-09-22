@@ -1,6 +1,11 @@
 import json
 
-from .llm import stream_llm, collect_stream
+from .llm import (
+    stream_llm, 
+    collect_stream,
+    summarize_messages,
+    )
+
 from .tools import (
     BASH_TOOL,
     READ_FILE_TOOL,
@@ -20,13 +25,16 @@ from .ui import (
     show_message,
     show_tool_call,
     show_tool_result,
+    show_context_status,
 )
+
+from .context import Context
 
 
 def main():
     show_header()
 
-    messages = []
+    context = Context()
 
     while True:
         user_input = get_input()
@@ -35,10 +43,15 @@ def main():
             show_goodbye()
             break
 
-        messages.append({
-            "role": "user",
-            "content": user_input,
-        })
+        context.add_user_message(user_input)
+        show_context_status(context.message_count())
+
+        if context.needs_compaction():
+            old_messages = context.get_old_messages()
+
+            if old_messages:
+                summary = summarize_messages(old_messages)
+                context.replace_old_messages(summary)
 
         # message = call_llm(
         #     messages,
@@ -56,7 +69,7 @@ def main():
             print("\nNyvero: ", end="", flush=True)
 
             stream = stream_llm(
-                messages,
+                context.get_messages(),
                 tools=[
                     BASH_TOOL,
                     READ_FILE_TOOL,
@@ -96,7 +109,7 @@ def main():
                             "arguments": tool_call["arguments"],
                         },
                     })
-            messages.append(assistant_message)
+            context.add_assistant_message(assistant_message)
 
             for tool_call in result["tool_calls"]:
                 name = tool_call["name"]
@@ -121,12 +134,10 @@ def main():
 
                 show_tool_result(tool_result)
 
-                messages.append({
-                    "role": "tool",
-                    "tool_call_id": tool_call["id"],
-                    "content": tool_result,
-                })
-
+                context.add_tool_result(
+                    tool_call["id"],
+                    tool_result,
+                 )
 
 if __name__ == "__main__":
     main()

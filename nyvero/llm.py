@@ -90,3 +90,34 @@ def collect_stream(response):
         "reasoning_content": reasoning_content,
         "tool_calls": list(tool_calls.values()),
     }
+
+    # a dedicated summarizer
+
+def summarize_messages(messages):
+    prompt = {
+        "role": "user",
+        "content": (
+            "Summarize this earlier coding-agent conversation.\n\n"
+            "Preserve important facts such as:\n"
+            "- files that were created or modified\n"
+            "- user requirements\n"
+            "- important technical decisions\n"
+            "- errors and their resolutions\n"
+            "- unfinished tasks\n\n"
+            "Do not invent information.\n\n"
+            f"Conversation:\n{messages}"
+        ),
+    }
+
+    response = client.chat.completions.create(
+        model=config.MODEL,
+        messages=[prompt],
+        reasoning_effort=config.REASONING_EFFORT,
+        extra_body={
+            "thinking": {
+                "type": "enabled",
+            }
+        },
+    )
+
+    return response.choices[0].message.content

@@ -48,3 +48,6 @@ def end_stream() -> None:
 
 def stream_message(text:str) -> None:
     print(text, end="", flush=True)
+
+def show_context_status(message_count: int) -> None:
+    print(f"\n[Context: {message_count} messages]")
