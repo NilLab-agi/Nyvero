@@ -13,23 +13,33 @@ from .tools import (
 )
 
 from .ui import (
-    get_input, 
-    show_message, 
+    get_input,
+    show_error,
+    show_goodbye,
+    show_header,
+    show_message,
     show_tool_call,
-    show_header,)
+    show_tool_result,
+)
+
 
 def main():
     show_header()
-    user_input = get_input()
 
-    messages = [
-        {
-            "role": "user",
-            "content": user_input,
-        }
-    ]
+    messages = []
 
     while True:
+        user_input = get_input()
+
+        if user_input.lower() in {"exit", "quit"}:
+            show_goodbye()
+            break
+
+        messages.append({
+            "role": "user",
+            "content": user_input,
+        })
+
         message = call_llm(
             messages,
             tools=[
@@ -57,14 +67,15 @@ def main():
                 tool_call.function.arguments
             )
 
-            show_tool_call(
-                name, 
-                arguments)
-
-            result = execute_tool(
+            show_tool_call(name, arguments)
+            try:
+                result = execute_tool(
                     name,
                     arguments,
-            )
+                )
+            except Exception as errors:
+                show_error(str(errors))
+                result = f"Tool execution failed: {errors}"
 
             show_tool_result(result)
 
