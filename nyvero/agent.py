@@ -5,6 +5,9 @@ from .tools import (
     BASH_TOOL,
     READ_FILE_TOOL,
     WRITE_FILE_TOOL,
+    LIST_FILES_TOOL,
+    FILE_EXISTS_TOOL,
+    DELETE_FILE_TOOL,
     execute_tool,
 )
 
@@ -25,6 +28,9 @@ def main():
                 BASH_TOOL,
                 READ_FILE_TOOL,
                 WRITE_FILE_TOOL,
+                LIST_FILES_TOOL,
+                FILE_EXISTS_TOOL,
+                DELETE_FILE_TOOL,
             ],
         )
 
