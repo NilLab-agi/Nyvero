@@ -12,8 +12,15 @@ from .tools import (
     execute_tool,
 )
 
+from .ui import (
+    get_input, 
+    show_message, 
+    show_tool_call,
+    show_header,)
+
 def main():
-    user_input = input("You: ")
+    show_header()
+    user_input = get_input()
 
     messages = [
         {
@@ -41,7 +48,7 @@ def main():
         )
 
         if not message.tool_calls:
-            print(f"\nNyvero: {message.content}")
+            show_message(f"{message.content}")
             break
 
         for tool_call in message.tool_calls:
@@ -50,10 +57,16 @@ def main():
                 tool_call.function.arguments
             )
 
+            show_tool_call(
+                name, 
+                arguments)
+
             result = execute_tool(
                     name,
                     arguments,
             )
+
+            show_tool_result(result)
 
             messages.append({
                 "role": "tool",
