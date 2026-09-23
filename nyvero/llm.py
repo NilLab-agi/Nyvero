@@ -93,25 +93,38 @@ def collect_stream(response):
 
     # a dedicated summarizer
 
-def summarize_messages(messages):
-    prompt = {
-        "role": "user",
-        "content": (
-            "Summarize this earlier coding-agent conversation.\n\n"
-            "Preserve important facts such as:\n"
-            "- files that were created or modified\n"
-            "- user requirements\n"
-            "- important technical decisions\n"
-            "- errors and their resolutions\n"
-            "- unfinished tasks\n\n"
-            "Do not invent information.\n\n"
-            f"Conversation:\n{messages}"
-        ),
-    }
+def summarize_messages(messages, sytem_prompt):
+    # prompt = {
+    #     "role": "user",
+    #     "content": (
+    #         "Summarize this earlier coding-agent conversation.\n\n"
+    #         "Preserve important facts such as:\n"
+    #         "- files that were created or modified\n"
+    #         "- user requirements\n"
+    #         "- important technical decisions\n"
+    #         "- errors and their resolutions\n"
+    #         "- unfinished tasks\n\n"
+    #         "Do not invent information.\n\n"
+    #         f"Conversation:\n{messages}"
+    #     ),
+    # }
 
     response = client.chat.completions.create(
         model=config.MODEL,
-        messages=[prompt],
+        messages=[
+            {
+                "role": "system",
+                "content": system_prompt,
+            },
+            {
+                "role": "user",
+                "content": (
+                    "Here is the earliest coding-agent conversation"
+                    "that needs to be compacted: \n\n"
+                    f"{messages}"
+                )
+            }
+        ],
         reasoning_effort=config.REASONING_EFFORT,
         extra_body={
             "thinking": {
