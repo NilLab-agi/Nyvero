@@ -1,0 +1,26 @@
+import json
+from datetime import datetime
+from pathlib import Path
+
+SESSION_DIR = Path.home() / ".nyvero" / "sessions"
+
+CURRENT = datetime.now().strftime("%Y%m%d-%H%M%S") 
+
+# Every Nyvero run gets a session identifier such as:
+# ~/.nyvero/sessions/20260923-072500.jsonl 
+
+WRITTEN = 0
+
+def path_for(session_id:str) -> Path:
+    return SESSION_DIR / f"{session_id}.jsonl"
+
+# If we call:
+
+# path_for("20260923-072500")
+
+# Python constructs:
+
+# ~/.nyvero/sessions/20260923-072500.jsonl
+
+# We're deliberately using .jsonl, not .json.
+
