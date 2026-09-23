@@ -136,7 +136,7 @@ def main():
                     arguments,
                 )
 
-                if requires_confirmation(name):
+                if requires_confirmation(name, arguments):
                     if not confirm_tool_call(name, arguments):
                         tool_result = "Tool execution denied by the user. "
                         show_tool_result(tool_result)
