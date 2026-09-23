@@ -38,11 +38,17 @@ from .permissions import (
     permission_for_tool,
 ) 
 
+from .import session
+
 
 def main():
     show_header()
 
     context = Context()
+    saved_messages = session.load(session.CURRENT)
+
+    if saved_messages:
+        context.messages = saved_messages
 
     while True:
         user_input = get_input()
