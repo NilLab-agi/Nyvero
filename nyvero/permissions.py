@@ -21,14 +21,61 @@ SAFE_BASH_COMMANDS = {
     "pytest",
 }
 
+DANGEROUS_BASH_PREFIXES = {
+    "sudo ",
+    "rm ",
+    "rm -",
+    "shutdown",
+    "reboot",
+    "mkfs",
+    "dd ",
+}
+
+ALLOW = "allow"
+CONFIRM = "confirm"
+DENY = "deny"
+
 
 def requires_confirmation(tool_name, arguments=None):
     if tool_name in CONFIRM_TOOLS:
-        return True
+        return CONFIRM
 
     if tool_name != "bash":
-        return False
+        return bash_permission(
+            arguments.get("command", "")
+        )
+    return ALLOW
 
     command = arguments.get("command", "").strip()
 
     return command not in SAFE_BASH_COMMANDS
+
+def bash_permission(command):
+    command = command.strip()
+
+    if command in SAFE_BASH_COMMANDS:
+        return ALLOW
+
+    for prefix in DANGEROUS_BASH_PREFIXES:
+        if command.startswith(prefix):
+            return DENY
+
+    return CONFIRM
+
+    return CONFIRM
+
+def permission_for_tool(tool_name, arguments=None):
+    arguments = arguments or {}
+
+    if tool_name in SAFE_TOOLS:
+        return ALLOW
+
+    if tool_name in CONFIRM_TOOLS:
+        return CONFIRM
+
+    if tool_name == "bash":
+        return bash_permission(
+            arguments.get("command", "")
+        )
+
+    return DENY
