@@ -1,0 +1,37 @@
+                 ┌───────────────┐
+                 │    agent.py   │
+                 └───────┬───────┘
+                         │
+                         ▼
+                 ┌───────────────┐
+                 │   Context     │
+                 │               │
+                 │ messages      │
+                 │ size check    │
+                 └───────┬───────┘
+                         │
+                 too large?
+                         │
+                         ▼
+                 ┌───────────────┐
+                 │ compaction.py │
+                 │               │
+                 │ find boundary │
+                 │ summarize     │
+                 │ rebuild       │
+                 └───────┬───────┘
+                         │
+                         ▼
+                 ┌───────────────┐
+                 │    Context    │
+                 │               │
+                 │ system        │
+                 │ summary       │
+                 │ recent msgs   │
+                 └───────┬───────┘
+                         │
+                         ▼
+                 ┌───────────────┐
+                 │   session.py  │
+                 │   persist     │
+                 └───────────────┘
