@@ -13,10 +13,14 @@ def bash(command: str) -> str:
     return results.stdout + results.stderr
 
 def read_file(path: str) -> str:
+    file_path = resolve_workspace_path(path)
+
     with open(path, "r", encoding="utf-8") as file:
         return file.read()
 
 def write_file(path: str, content: str) -> str:
+    file_path = resolve_workspace_path(path)
+
     with open(path, "w", encoding="utf-8") as file:
         file.write(content)
 
@@ -25,7 +29,7 @@ def write_file(path: str, content: str) -> str:
 # List Tool
 
 def list_files(path: str = ".") -> str:
-    directory = Path(path)
+    directory = resolve_workspace_path(path)
 
     if not directory.is_dir():
         return f"Not a directory: {path}"
@@ -42,12 +46,14 @@ def list_files(path: str = ".") -> str:
 # file_exists tool — check whether a path exists
 
 def file_exists(path: str) -> str:
+    file_exists = resolve_workspace_path(path)
+
     return "true" if Path(path).exists() else "false"
     
 # delete file tool
 
 def delete_file(path: str) -> str:
-    file_path = Path(path)
+    file_path = resolve_workspace_path(path)
 
     if not file_path.exists():
         return f"Path doesn't exist: {path}"
@@ -66,7 +72,7 @@ def edit_file(
     old_text: str,
     new_text: str,
 ) -> str:
-    file_path = Path(path)
+    file_path = resolve_workspace_path(path)
 
     if not file_path.is_file():
         return f"File does not exist: {path}"
