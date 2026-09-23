@@ -36,3 +36,25 @@ def save(messages):
     WRITTEN = len(message)
 # rather than rewriting the entire conversation every time.
 # That gives us an append-only transcript
+
+def load(session_id: str):
+    messages = []
+
+    session_path = path_for(session_id)
+
+    if not session_path.exists():
+        return messages
+
+    for line in session_path.read_text(encoding="utf-8").splitlines():
+        if not line.split():
+            continue
+
+        try:
+            messages.append(json.loads(line))
+        except json.JSONDecodeError:
+            continue
+
+        return messages
+    # Load a saved session
+
+    
