@@ -4,13 +4,24 @@ from pathlib import Path
 WORKSPACE = Path.cwd().resolve()
 
 def bash(command: str) -> str:
-    results = subprocess.run(
-        command,
-        shell=True,
-        capture_output=True,
-        text=True,
-    )
-    return results.stdout + results.stderr
+    try:
+        results = subprocess.run(
+            command,
+            shell=True,
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+    except subprocess.TimeoutExpired:
+        return "Command timed out after 30 seconds."
+
+    output = results.stdout + results.stderr
+
+    if results.returncode != 0:
+        output += f"\nCommand exited with code {results.returncode}"
+
+    return output
+
 
 def read_file(path: str) -> str:
     file_path = resolve_workspace_path(path)

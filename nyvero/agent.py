@@ -31,7 +31,13 @@ from .ui import (
 
 from .context import Context
 
-from .permissions import requires_confirmation
+from .permissions import (
+    ALLOW,
+    CONFIRM,
+    DENY,
+    requires_confirmation,
+    permission_for_tool,
+) 
 
 
 def main():
@@ -136,17 +142,49 @@ def main():
                     arguments,
                 )
 
-                if requires_confirmation(name, arguments):
-                    if not confirm_tool_call(name, arguments):
-                        tool_result = "Tool execution denied by the user. "
+                # if requires_confirmation(name, arguments):
+                #     if not confirm_tool_call(name, arguments):
+                #         tool_result = "Tool execution denied by the user. "
+                #         show_tool_result(tool_result)
+
+                #         context.add_tool_result(
+                #             tool_call["id"],
+                #             tool_result,
+                #         )
+
+                #         continue
+
+                permission = permission_for_tool(
+                    name,
+                    arguments,
+                )
+
+                if permission == DENY:
+                    tool_result = "Tool excution denied by Nyvero's safety policy"
+
+                    show_error(tool_result)
+                    show_tool_result(tool_result)
+
+                    context.add_tool_result(
+                        tool_call["id"],
+                        tool_result,
+                    )
+
+                    continue
+
+                if permission == CONFIRM:
+                    if not confirm_tool_call(name,arguments):
+                        tool_result = "Tool excution denied by the user"
+
                         show_tool_result(tool_result)
 
                         context.add_tool_result(
                             tool_call["id"],
                             tool_result,
                         )
-
+                        
                         continue
+                    
 
                 try:
                     tool_result = execute_tool(
