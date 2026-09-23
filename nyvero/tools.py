@@ -26,13 +26,13 @@ def bash(command: str) -> str:
 def read_file(path: str) -> str:
     file_path = resolve_workspace_path(path)
 
-    with open(path, "r", encoding="utf-8") as file:
+    with open(file_path, "r", encoding="utf-8") as file:
         return file.read()
 
 def write_file(path: str, content: str) -> str:
     file_path = resolve_workspace_path(path)
 
-    with open(path, "w", encoding="utf-8") as file:
+    with open(file_path, "w", encoding="utf-8") as file:
         file.write(content)
 
     return f"Successfully wrote to {path}"
@@ -57,9 +57,9 @@ def list_files(path: str = ".") -> str:
 # file_exists tool — check whether a path exists
 
 def file_exists(path: str) -> str:
-    file_exists = resolve_workspace_path(path)
+    file_path = resolve_workspace_path(path)
 
-    return "true" if Path(path).exists() else "false"
+    return "true" if file_path.exists() else "false"
     
 # delete file tool
 
@@ -291,5 +291,5 @@ def resolve_workspace_path(path: str) -> Path:
             f"Path is outside the workspace: {path}"
         )
 
-        return requested 
+    return requested
 
