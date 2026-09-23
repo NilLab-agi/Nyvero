@@ -35,7 +35,6 @@ from .permissions import (
     ALLOW,
     CONFIRM,
     DENY,
-    requires_confirmation,
     permission_for_tool,
 ) 
 

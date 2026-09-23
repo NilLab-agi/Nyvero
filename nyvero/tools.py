@@ -1,24 +1,19 @@
 import subprocess
 from pathlib import Path
+from . import sandbox
 
 WORKSPACE = Path.cwd().resolve()
 
 def bash(command: str) -> str:
     try:
-        results = subprocess.run(
-            command,
-            shell=True,
-            capture_output=True,
-            text=True,
-            timeout=30,
-        )
+        result = sandbox.run(command, timeout=30)
     except subprocess.TimeoutExpired:
         return "Command timed out after 30 seconds."
 
-    output = results.stdout + results.stderr
+    output = result.stdout + result.stderr
 
-    if results.returncode != 0:
-        output += f"\nCommand exited with code {results.returncode}"
+    if result.returncode != 0:
+        output += f"\nCommand exited with code {result.returncode}"
 
     return output
 
