@@ -57,4 +57,15 @@ def load(session_id: str):
         return messages
     # Load a saved session
 
-    
+def open_session(session_id: str):
+    global CURRENT, WRITTEN
+
+    CURRENT = session_id
+
+    messages = load(session_id)
+
+    WRITTEN = len(messages)
+
+    return messages
+
+    # makes a saved session the current session
