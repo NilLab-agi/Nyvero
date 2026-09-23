@@ -24,3 +24,15 @@ def path_for(session_id:str) -> Path:
 
 # We're deliberately using .jsonl, not .json.
 
+def save(messages):
+    global WRITTEN
+
+    SESSION_DIR.mkdir(parents=True, exist_ok=True)
+
+    with path_for(CURRENT).open("a", encoding="utf-8") as file:
+        for message in messages[WRITTEN:]:
+            file.write(json.dumps(message) + "\n")
+    
+    WRITTEN = len(message)
+# rather than rewriting the entire conversation every time.
+# That gives us an append-only transcript
