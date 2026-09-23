@@ -1,6 +1,8 @@
 import subprocess
 from pathlib import Path
 
+WORKSPACE = Path.cwd().resolve()
+
 def bash(command: str) -> str:
     results = subprocess.run(
         command,
@@ -50,7 +52,7 @@ def delete_file(path: str) -> str:
     if not file_path.exists():
         return f"Path doesn't exist: {path}"
 
-    if file_path.is_file():
+    if not file_path.is_file():
         return f"Not a file: {path}"
     
     file_path.unlink()
@@ -263,4 +265,14 @@ def execute_tool(name: str, arguments: dict) -> str:
 
     return tool(**arguments)
 
+
+def resolve_workspace_path(path: str) -> Path:
+    requested = (WORKSPACE / path).resolve()
+
+    if requested != WORKSPACE and WORKSPACE not in requested.parents:
+        raise ValueError(
+            f"Path is outside the workspace: {path}"
+        )
+
+        return requested 
 
