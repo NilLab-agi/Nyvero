@@ -99,3 +99,16 @@ def all_sessions():
         }
         for path in files
     ]
+
+# Persist the compacted context
+
+def rewritten(messages):
+    global WRITTEN
+
+    SESSION_DIR.mkdir(parents=True, exist_ok=True)
+
+    with path_for(CURRENT).open("w", encoding="utf-8") as file:
+        for message in messages:
+            file.write(json.dumps(message) + "\n")
+
+    WRITTEN = len(message)
