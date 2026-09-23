@@ -58,6 +58,9 @@ def main():
             break
 
         context.add_user_message(user_input)
+        session.save(context.get_messages())
+
+
         show_context_status(context.message_count())
 
         if context.needs_compaction():
@@ -124,6 +127,7 @@ def main():
                         },
                     })
             context.add_assistant_message(assistant_message)
+            session.save(context.get_messages())
 
             for tool_call in result["tool_calls"]:
                 name = tool_call["name"]
