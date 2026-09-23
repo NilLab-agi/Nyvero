@@ -74,17 +74,19 @@ def compact(messages):
         COMPACTION_PROMPT,
         )
 
-    return [
-        messages[0],
-        {
-            "role": "sytem",
-            "content": (
-                "Previous conversation summary: \n\n"
-                + summary
-            ),
-        },
-        *recent_messages,
-    ]
+    # return [
+    #     messages[0],
+    #     {
+    #         "role": "sytem",
+    #         "content": (
+    #             "Previous conversation summary: \n\n"
+    #             + summary
+    #         ),
+    #     },
+    #     *recent_messages,
+    # ]
+
+    return summary
 
 
     

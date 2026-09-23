@@ -60,7 +60,11 @@ class Context:
             self.messages[0],
             {
                 "role": "system",
-                "content": f"Previos conversation summary: \n{summary}"
+                "content": (
+                    "<summary>\n"
+                    + summary
+                    + "\n</summary>"
+                ),
             },
             *recent_messages,
         ]
