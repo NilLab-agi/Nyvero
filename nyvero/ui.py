@@ -51,3 +51,15 @@ def stream_message(text:str) -> None:
 
 def show_context_status(message_count: int) -> None:
     print(f"\n[Context: {message_count} messages]")
+
+# human confirmation
+
+def confirm_tool_call(name, arguments):
+    print(f"\n Nyvero wants to run: {name}")
+
+    for key, value in arguments.items():
+        print(f"  {key}: {value}")
+    
+    answer = input("Allow this action? [y/N]: ").strip().lower()
+
+    return answer in {"y", "yes"}

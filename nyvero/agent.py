@@ -26,9 +26,12 @@ from .ui import (
     show_tool_call,
     show_tool_result,
     show_context_status,
+    confirm_tool_call,
 )
 
 from .context import Context
+
+from .permissions import requires_confirmation
 
 
 def main():
@@ -118,16 +121,39 @@ def main():
                     tool_call["arguments"]
                 )
 
+                # show_tool_call(
+                #     name,
+                #     arguments,
+                # )
+
+                # try:
+                #     tool_result = execute_tool(
+                #         name,
+                #         arguments,
+                #     )
                 show_tool_call(
                     name,
                     arguments,
                 )
+
+                if requires_confirmation(name):
+                    if not confirm_tool_call(name, arguments):
+                        tool_result = "Tool execution denied by the user. "
+                        show_tool_result(tool_result)
+
+                        context.add_tool_result(
+                            tool_call["id"],
+                            tool_result,
+                        )
+
+                        continue
 
                 try:
                     tool_result = execute_tool(
                         name,
                         arguments,
                     )
+
                 except Exception as error:
                     show_error(str(error))
                     tool_result = f"Tool execution failed: {error}"
