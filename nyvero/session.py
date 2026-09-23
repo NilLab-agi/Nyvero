@@ -69,3 +69,33 @@ def open_session(session_id: str):
     return messages
 
     # makes a saved session the current session
+
+
+## Title
+
+def title(messages):
+    for message in messages:
+        if message.get("role") == "user":
+            content = message.get("content") or ""
+            return " ".join(str(content).split())[:60]
+    return"(empty)"
+
+# List all session
+
+def all_sessions():
+    if not SESSION_DIR.exists():
+        return []
+    
+    files = sorted(
+        SESSION_DIR.glob("*.jsonl"),
+        key=lambda path: path.stat().st_mtime,
+        reverse=True,
+    )
+
+    return [
+        {
+            "id": path.stem,
+            "title": title.stat().st_ntime,
+        }
+        for path in files
+    ]

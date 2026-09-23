@@ -1,3 +1,4 @@
+import argparse
 import json
 
 from .llm import (
@@ -41,14 +42,44 @@ from .permissions import (
 from .import session
 
 
+# def main():
+#     show_header()
+
+#     context = Context()
+#     saved_messages = session.load(session.CURRENT)
+
+#     if saved_messages:
+#         context.messages = saved_messages
+
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Resume the most recent session",
+    )
+
+    args = parser.parse_args()
+
     show_header()
 
     context = Context()
-    saved_messages = session.load(session.CURRENT)
 
-    if saved_messages:
-        context.messages = saved_messages
+    if args.resume:
+        sessions = session.all_sessions()
+
+        if sessions:
+            latest = sessions[0]
+            saved_messages = session.open_session(latest["id"])
+
+            if saved_messages:
+                context.messages = saved_messages
+
+                print(
+                    f"\nResumed session: {latest['title']}"
+                )
+        else:
+            print("\nNo saved sessions found.")
 
     while True:
         user_input = get_input()
@@ -169,7 +200,7 @@ def main():
                 )
 
                 if permission == DENY:
-                    tool_result = "Tool excution denied by Nyvero's safety policy"
+                    tool_result = "Tool execution denied by Nyvero's safety policy"
 
                     show_error(tool_result)
                     show_tool_result(tool_result)
@@ -179,11 +210,13 @@ def main():
                         tool_result,
                     )
 
+                    session.save(context.get_messages())
+
                     continue
 
                 if permission == CONFIRM:
                     if not confirm_tool_call(name,arguments):
-                        tool_result = "Tool excution denied by the user"
+                        tool_result = "Tool execution denied by the user"
 
                         show_tool_result(tool_result)
 
@@ -191,6 +224,8 @@ def main():
                             tool_call["id"],
                             tool_result,
                         )
+
+                        session.save(context.get_messages())
                         
                         continue
                     
@@ -211,6 +246,8 @@ def main():
                     tool_call["id"],
                     tool_result,
                  )
+
+                session.save(context.get_messages())
 
 if __name__ == "__main__":
     main()

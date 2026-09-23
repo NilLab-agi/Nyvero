@@ -1,0 +1,40 @@
+                 USER MESSAGE
+                      │
+                      ▼
+              context.add_user()
+                      │
+                      ▼
+                   save()
+                      │
+                      ▼
+                 ┌─────────┐
+                 │   LLM   │
+                 └────┬────┘
+                      │
+              assistant response
+                      │
+                      ▼
+               add_assistant()
+                      │
+                      ▼
+                   save()
+                      │
+                      ▼
+                 tool call?
+                  /       \
+                no         yes
+                │           │
+                ▼           ▼
+               done       execute
+                            │
+                            ▼
+                       tool result
+                            │
+                            ▼
+                       add_tool()
+                            │
+                            ▼
+                          save()
+                            │
+                            ▼
+                       back to LLM
