@@ -33,7 +33,7 @@ def save(messages):
         for message in messages[WRITTEN:]:
             file.write(json.dumps(message) + "\n")
     
-    WRITTEN = len(message)
+    WRITTEN = len(messages)
 # rather than rewriting the entire conversation every time.
 # That gives us an append-only transcript
 
@@ -54,7 +54,7 @@ def load(session_id: str):
         except json.JSONDecodeError:
             continue
 
-        return messages
+    return messages
     # Load a saved session
 
 def open_session(session_id: str):
@@ -95,14 +95,14 @@ def all_sessions():
     return [
         {
             "id": path.stem,
-            "title": title.stat().st_ntime,
+            "title": title(load(path.stem)),
         }
         for path in files
     ]
 
 # Persist the compacted context
 
-def rewritten(messages):
+def rewrite(messages):
     global WRITTEN
 
     SESSION_DIR.mkdir(parents=True, exist_ok=True)
@@ -111,4 +111,4 @@ def rewritten(messages):
         for message in messages:
             file.write(json.dumps(message) + "\n")
 
-    WRITTEN = len(message)
+    WRITTEN = len(messages)

@@ -4,7 +4,6 @@ import json
 from .llm import (
     stream_llm, 
     collect_stream,
-    summarize_messages,
     )
 
 from .tools import (
@@ -40,6 +39,7 @@ from .permissions import (
 ) 
 
 from .import session
+from .import compact
 
 
 # def main():
@@ -95,11 +95,11 @@ def main():
         show_context_status(context.message_count())
 
         if context.needs_compaction():
-            old_messages = context.get_old_messages()
+            summary = compact.compact(context.get_messages())
 
-            if old_messages:
-                summary = summarize_messages(old_messages)
+            if summary:
                 context.replace_old_messages(summary)
+                session.rewrite(context.get_messages())
 
         # message = call_llm(
         #     messages,
