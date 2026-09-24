@@ -1,6 +1,7 @@
 import subprocess
 from pathlib import Path
 from . import sandbox
+from .skills import read_skill
 
 WORKSPACE = Path.cwd().resolve()
 
@@ -145,6 +146,28 @@ READ_FILE_TOOL = {
     },
 }
 
+READ_SKILL_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "read_skill",
+        "description": (
+            "Load the full instructions for an available skill. "
+            "Use this when a skill is relevant to the current task."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Name of the skill to load."
+                },
+            },
+            "required": ["name"],
+        },
+        
+    }
+}
+
 WRITE_FILE_TOOL = {
     "type": "function",
     "function": {
@@ -267,6 +290,7 @@ TOOLS =  {
     "file_exists": file_exists,
     "delete_file": delete_file,
     "edit_file": edit_file,
+    "read_skill": read_skill,
 }
 
 def execute_tool(name: str, arguments: dict) -> str:

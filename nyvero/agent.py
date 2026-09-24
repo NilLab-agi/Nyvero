@@ -15,6 +15,7 @@ from .tools import (
     DELETE_FILE_TOOL,
     EDIT_FILE_TOOL,
     execute_tool,
+    READ_SKILL_TOOL,
 )
 
 from .ui import (
@@ -126,6 +127,7 @@ def main():
                     FILE_EXISTS_TOOL,
                     DELETE_FILE_TOOL,
                     EDIT_FILE_TOOL,
+                    READ_SKILL_TOOL,
                 ],
             )
 
