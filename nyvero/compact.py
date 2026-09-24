@@ -63,11 +63,15 @@ def compact(messages):
     """
     cutoff = find_cutoff(messages)
 
-    if cutoff <= 1:
-        return messages
+    # if cutoff <= 1:
+    #     return messages
 
     old_messages = messages[1:cutoff]
-    recent_messages = messages[cutoff:]
+    
+    if not old_messages:
+        return ""
+
+    # recent_messages = messages[cutoff:]
 
     summary = summarize_messages(
         old_messages,

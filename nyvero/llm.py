@@ -93,7 +93,7 @@ def collect_stream(response):
 
     # a dedicated summarizer
 
-def summarize_messages(messages, sytem_prompt):
+def summarize_messages(messages, system_prompt):
     # prompt = {
     #     "role": "user",
     #     "content": (
