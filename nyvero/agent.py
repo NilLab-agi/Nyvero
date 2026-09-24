@@ -16,6 +16,9 @@ from .tools import (
     EDIT_FILE_TOOL,
     execute_tool,
     READ_SKILL_TOOL,
+    ADD_TODO_TOOL,
+    LIST_TODOS_TOOL,
+    UPDATE_TODO_TOOL,
 )
 
 from .ui import (
