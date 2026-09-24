@@ -3,6 +3,8 @@ from pathlib import Path
 from . import sandbox
 from .skills import read_skill
 
+from .todos import add_todo, list_todos, update_todo
+
 WORKSPACE = Path.cwd().resolve()
 
 def bash(command: str) -> str:
@@ -282,6 +284,59 @@ EDIT_FILE_TOOL = {
     },
 }
 
+ADD_TODO_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "add_todo",
+        "description": "Add a new todo item.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string",
+                    "description": "The task to add.",
+                }
+            },
+            "required": ["content"],
+        },
+    },
+}
+
+LIST_TODOS_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "list_todos",
+        "description": "List all current todo items.",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+        },
+    },
+}
+
+UPDATE_TODO_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "update_todo",
+        "description": "Update the status of a todo item.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "todo_id": {
+                    "type": "integer",
+                    "description": "The ID of the todo.",
+                },
+                "status": {
+                    "type": "string",
+                    "description": "The new status.",
+                    "enum": ["pending", "in_progress", "completed"],
+                },
+            },
+            "required": ["todo_id", "status"],
+        },
+    },
+}
+
 TOOLS =  {
     "bash": bash,
     "read_file": read_file,
@@ -291,6 +346,9 @@ TOOLS =  {
     "delete_file": delete_file,
     "edit_file": edit_file,
     "read_skill": read_skill,
+    "add_todo": add_todo,
+    "list_todo": list_todos,
+    "update_todos": update_todo,
 }
 
 def execute_tool(name: str, arguments: dict) -> str:
