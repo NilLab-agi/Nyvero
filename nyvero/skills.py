@@ -8,26 +8,44 @@ SKILL_DIRS = [
 ]
 
 def find_skills():
-    """Discover available skills and their matadata"""
-    skills =  {}
+    """Discover available skills and their metadata."""
+    skills = {}
 
     for directory in SKILL_DIRS:
         for path in sorted(directory.glob("*/SKILL.md")):
-            _, frontmatter, _ = path.read_text(
-                encoding="utf-8"
-            ).split("---", 2)
+            try:
+                content = path.read_text(
+                    encoding="utf-8"
+                )
 
-            metadata = yaml.safe_load(frontmatter)
+                parts = content.split("---", 2)
 
-            name = metadata["name"]
-            descriptions = " ".join(
-                metadata["description"].split()
-            )
+                if len(parts) != 3:
+                    continue
 
-            skills[name] = {
-                "descriptions": descriptions,
-                "path": path
-            }
+                _, frontmatter, _ = parts
+
+                metadata = yaml.safe_load(frontmatter)
+
+                if not isinstance(metadata, dict):
+                    continue
+
+                name = metadata.get("name")
+                description = metadata.get("description")
+
+                if not name or not description:
+                    continue
+
+                skills[name] = {
+                    "description": " ".join(
+                        str(description).split()
+                    ),
+                    "path": path,
+                }
+
+            except (OSError, yaml.YAMLError):
+                continue
+
     return skills
 
 SKILLS = find_skills()
