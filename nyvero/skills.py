@@ -53,7 +53,7 @@ SKILLS = find_skills()
 def skills_prompt():
     """Return skill names and descriptions for the agent prompt."""
     return "\n".join(
-        f"- {name}: {skill["descriptions"]}"
+        f"- {name}: {skill["description"]}"
         for name, skill in SKILLS.items()
     )
 
