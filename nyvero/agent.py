@@ -131,6 +131,9 @@ def main():
                     DELETE_FILE_TOOL,
                     EDIT_FILE_TOOL,
                     READ_SKILL_TOOL,
+                    ADD_TODO_TOOL,
+                    LIST_TODOS_TOOL,
+                    UPDATE_TODO_TOOL,
                 ],
             )
 
