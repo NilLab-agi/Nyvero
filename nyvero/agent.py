@@ -19,6 +19,7 @@ from .tools import (
     ADD_TODO_TOOL,
     LIST_TODOS_TOOL,
     UPDATE_TODO_TOOL,
+    TASK_TOOL,
 )
 
 from .ui import (
@@ -134,6 +135,7 @@ def main():
                     ADD_TODO_TOOL,
                     LIST_TODOS_TOOL,
                     UPDATE_TODO_TOOL,
+                    TASK_TOOL,
                 ],
             )
 

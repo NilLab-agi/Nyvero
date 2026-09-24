@@ -5,6 +5,8 @@ from .skills import read_skill
 
 from .todos import add_todo, list_todos, update_todo
 
+from .subagent import task
+
 WORKSPACE = Path.cwd().resolve()
 
 def bash(command: str) -> str:
@@ -337,6 +339,31 @@ UPDATE_TODO_TOOL = {
     },
 }
 
+TASK_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "task",
+        "description": (
+            "Delegate a focused read-only exploration task to a fresh "
+            "subagent with its own context. The subagent investigates "
+            "the codebase and returns a concise report."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": (
+                        "A self-contained question or exploration task "
+                        "for the subagent."
+                    ),
+                }
+            },
+            "required": ["description"],
+        },
+    },
+}
+
 TOOLS =  {
     "bash": bash,
     "read_file": read_file,
@@ -349,6 +376,7 @@ TOOLS =  {
     "add_todo": add_todo,
     "list_todo": list_todos,
     "update_todos": update_todo,
+    "task": task,
 }
 
 def execute_tool(name: str, arguments: dict) -> str:

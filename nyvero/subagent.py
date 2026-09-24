@@ -4,14 +4,31 @@ from .llm import (
     stream_llm,
     collect_stream,
 )
-from .tools import (
-    BASH_TOOL,
-    READ_FILE_TOOL,
-    LIST_FILES_TOOL,
-    FILE_EXISTS_TOOL,
-    READ_SKILL_TOOL,
-    execute_tool,
-)
+# from .tools import (
+#     BASH_TOOL,
+#     READ_FILE_TOOL,
+#     LIST_FILES_TOOL,
+#     FILE_EXISTS_TOOL,
+#     READ_SKILL_TOOL,
+#     execute_tool,
+# )
+
+def get_subagent_tools():
+    from .tools import (
+        BASH_TOOL,
+        READ_FILE_TOOL,
+        LIST_FILES_TOOL,
+        FILE_EXISTS_TOOL,
+        READ_SKILL_TOOL,
+    )
+
+    return [
+        BASH_TOOL,
+        READ_FILE_TOOL,
+        LIST_FILES_TOOL,
+        FILE_EXISTS_TOOL,
+        READ_SKILL_TOOL,
+    ]
 
 
 MAX_TURNS = 12
@@ -60,13 +77,13 @@ Do not guess. If you cannot find something, say so clearly.
 """.strip()
 
 
-SUBAGENT_TOOLS = [
-    BASH_TOOL,
-    READ_FILE_TOOL,
-    LIST_FILES_TOOL,
-    FILE_EXISTS_TOOL,
-    READ_SKILL_TOOL,
-]
+# SUBAGENT_TOOLS = [
+#     BASH_TOOL,
+#     READ_FILE_TOOL,
+#     LIST_FILES_TOOL,
+#     FILE_EXISTS_TOOL,
+#     READ_SKILL_TOOL,
+# ]
 
 
 ALLOWED_TOOLS = {
@@ -85,6 +102,7 @@ def task(description: str) -> str:
     The subagent receives only the task description and returns
     its final textual findings to the parent agent.
     """
+    from .tools import execute_tool
 
     messages = [
         {
@@ -102,7 +120,7 @@ def task(description: str) -> str:
     for _ in range(MAX_TURNS):
         stream = stream_llm(
             messages,
-            tools=SUBAGENT_TOOLS,
+            tools=get_subagent_tools,
         )
 
         result = collect_stream(stream)
