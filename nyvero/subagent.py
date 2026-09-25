@@ -120,7 +120,7 @@ def task(description: str) -> str:
     for _ in range(MAX_TURNS):
         stream = stream_llm(
             messages,
-            tools=get_subagent_tools,
+            tools=get_subagent_tools(),
         )
 
         result = collect_stream(stream)

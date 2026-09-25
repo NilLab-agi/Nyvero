@@ -1,9 +1,11 @@
 import subprocess
 from pathlib import Path
 from . import sandbox
+from .permissions import CONFIRM, DENY, permission_for_tool
 from .skills import read_skill
 
 from .todos import add_todo, list_todos, update_todo
+from .ui import ui
 
 from .subagent import task
 
@@ -380,12 +382,32 @@ TOOLS = {
 }
 
 def execute_tool(name: str, arguments: dict) -> str:
+    """Run one tool call through the permission layer.
+
+    Shared by the main loop and by subagents, so a subagent is fenced in by
+    exactly the same rules - it is not a way around them.
+
+    A tool call is text the model wrote, so all of it is untrusted: the name
+    may not exist and the arguments may not match the signature. Both come
+    back as a result the model can read and retry, never as a crash.
+    """
     tool = TOOLS.get(name)
 
     if tool is None:
         return f"Unknown tool: {name}"
 
-    return tool(**arguments)
+    permission = permission_for_tool(name, arguments)
+
+    if permission == DENY:
+        return "Tool execution denied by Nyvero's safety policy"
+
+    if permission == CONFIRM and not ui.confirm(name, arguments):
+        return "Tool execution denied by the user"
+
+    try:
+        return tool(**arguments)
+    except Exception as error:
+        return f"Tool execution failed: {error}"
 
 
 def resolve_workspace_path(path: str) -> Path:

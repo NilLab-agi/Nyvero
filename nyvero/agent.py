@@ -25,12 +25,7 @@ from .tools import (
 from .ui import ui
 from .context import Context
 
-from .permissions import (
-    CONFIRM,
-    DENY,
-    permission_for_tool,
-)
-
+from . import commands
 from . import session
 from . import compact
 
@@ -79,6 +74,11 @@ def main():
         if user_input.lower() in {"exit", "quit"}:
             ui.goodbye()
             break
+
+        if user_input.startswith("/"):
+            commands.handle(user_input, context)
+            session.save(context.get_messages())
+            continue
 
         ui.user(user_input)
 
@@ -175,75 +175,10 @@ def main():
                     arguments,
                 )
 
-                permission = permission_for_tool(
+                tool_result = execute_tool(
                     name,
                     arguments,
                 )
-
-                if permission == DENY:
-                    tool_result = (
-                        "Tool execution denied by "
-                        "Nyvero's safety policy"
-                    )
-
-                    ui.error(tool_result)
-
-                    ui.tool(
-                        name,
-                        arguments,
-                        tool_result,
-                    )
-
-                    context.add_tool_result(
-                        tool_call["id"],
-                        tool_result,
-                    )
-
-                    session.save(
-                        context.get_messages()
-                    )
-
-                    continue
-
-                if permission == CONFIRM:
-                    if not ui.confirm(
-                        name,
-                        arguments,
-                    ):
-                        tool_result = (
-                            "Tool execution denied "
-                            "by the user"
-                        )
-
-                        ui.tool(
-                            name,
-                            arguments,
-                            tool_result,
-                        )
-
-                        context.add_tool_result(
-                            tool_call["id"],
-                            tool_result,
-                        )
-
-                        session.save(
-                            context.get_messages()
-                        )
-
-                        continue
-
-                try:
-                    tool_result = execute_tool(
-                        name,
-                        arguments,
-                    )
-
-                except Exception as error:
-                    ui.error(str(error))
-
-                    tool_result = (
-                        f"Tool execution failed: {error}"
-                    )
 
                 ui.tool(
                     name,
