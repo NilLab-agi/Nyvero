@@ -211,12 +211,30 @@ class UI:
             )
         )
 
-        try:
-            answer = input("  allow? (y/n)> ").strip()
-        except (EOFError, KeyboardInterrupt):
-            return False
+        while True:
+            try:
+                answer = input("  allow? (y/n)> ").strip().lower()
+            except (EOFError, KeyboardInterrupt):
+                self.console.print(
+                    Padding(
+                        Text("no input - denying.", style=MUTED),
+                        (0, 0, 0, 2),
+                    )
+                )
+                return False
 
-        return answer.lower().startswith("y")
+            if answer.startswith("y"):
+                return True
+
+            if answer.startswith("n"):
+                return False
+
+            self.console.print(
+                Padding(
+                    Text("please answer y or n.", style=MUTED),
+                    (0, 0, 0, 2),
+                )
+            )
 
     # Todos
 

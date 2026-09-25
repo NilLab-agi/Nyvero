@@ -21,6 +21,10 @@ and the sandbox are all plain Python — no hidden layers.
 It is a **learning project first**: the goal is understanding how a coding agent
 works, not matching production assistants feature for feature.
 
+## Demo
+
+▶ [Watch the Nyvero demo](https://raw.githubusercontent.com/NilLab-agi/Nyvero/main/additional/nyvero_demo.mp4)
+
 ## Architecture
 
 <p align="center">
