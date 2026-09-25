@@ -23,7 +23,11 @@ works, not matching production assistants feature for feature.
 
 ## Demo
 
-▶ [Watch the Nyvero demo](https://raw.githubusercontent.com/NilLab-agi/Nyvero/main/additional/nyvero_demo.mp4)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/NilLab-agi/Nyvero/main/additional/nyvero_demo.gif" alt="Nyvero demo" width="760">
+</p>
+
+▶ [Watch the full-quality mp4](https://raw.githubusercontent.com/NilLab-agi/Nyvero/main/additional/nyvero_demo.mp4)
 
 ## Architecture
 
