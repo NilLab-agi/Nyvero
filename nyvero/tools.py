@@ -364,7 +364,7 @@ TASK_TOOL = {
     },
 }
 
-TOOLS =  {
+TOOLS = {
     "bash": bash,
     "read_file": read_file,
     "write_file": write_file,
@@ -374,8 +374,8 @@ TOOLS =  {
     "edit_file": edit_file,
     "read_skill": read_skill,
     "add_todo": add_todo,
-    "list_todo": list_todos,
-    "update_todos": update_todo,
+    "list_todos": list_todos,
+    "update_todo": update_todo,
     "task": task,
 }
 

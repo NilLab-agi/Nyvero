@@ -8,6 +8,7 @@ dependencies = [
     "openai",
     "python-dotenv",
     "pyyaml>=6.0.3",
+    "rich>=15.0.0",
 ]
 
 [project.scripts]
