@@ -1,8 +1,5 @@
 # Nyvero targeted refactor
 
-A minimal, focused pass toward the architecture of
-[`avbiswas/neural-code`](https://github.com/avbiswas/neural-code). The previous
-attempt rewrote everything and replaced the UI by mistake. This version changes
 **four files** and leaves the UI exactly as it was.
 
 ```
