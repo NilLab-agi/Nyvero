@@ -2,6 +2,11 @@ SAFE_TOOLS = {
     "read_file",
     "list_files",
     "file_exists",
+    "read_skill",
+    "add_todo",
+    "list_todos",
+    "update_todo",
+    "task",
 }
 
 CONFIRM_TOOLS = {
