@@ -19,6 +19,14 @@ attempt rewrote everything and replaced the UI by mistake. This version changes
 
 ---
 
+## Commit
+
+These changes are commit **`e0c9028949db6a3796f7e5b213dc2cdf1b406a13`**
+(`refactor: targeted architecture changes (changed by ai)`). Run
+`git show e0c9028 --stat` to see the files it touched.
+
+---
+
 ## 1. `tools.py` — one shared executor
 
 **Problem.** `execute_tool` only dispatched. Permission checks and error
