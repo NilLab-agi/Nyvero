@@ -198,6 +198,17 @@ class UI:
             )
         )
 
+    def note(self, message):
+        self.console.print(
+            Padding(
+                Text(message, style=MUTED),
+                (0, 0, 0, 2),
+            )
+        )
+
+    def resumed(self, messages, title):
+        self.note(f"resumed · {title} · {len(messages)} messages")
+
     # Permission
 
     def confirm(self, name, args):
