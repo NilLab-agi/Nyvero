@@ -7,16 +7,12 @@
   One loop. One model. A handful of tools. No framework.
 </p>
 
-<p align="center">
-  Built by <a href="https://github.com/nilaymallikk">Nilay Mallik</a> · https://github.com/nilaymallikk
-</p>
-
 ---
 
 Nyvero is a lightweight coding agent you can read end to end. Give it a task and
 it decides which tools to call, runs them, feeds the results back to the model,
 and repeats until it has an answer. The loop, the tools, the permission rules
-and the sandbox are all plain Python — no hidden layers.
+and the sandbox are all plain Python, no hidden layers.
 
 It is a **learning project first**: the goal is understanding how a coding agent
 works, not matching production assistants feature for feature.
@@ -26,8 +22,6 @@ works, not matching production assistants feature for feature.
 <p align="center">
   <img src="https://raw.githubusercontent.com/NilLab-agi/Nyvero/main/additional/nyvero_demo.gif" alt="Nyvero demo" width="760">
 </p>
-
-▶ [Watch the full-quality mp4](https://raw.githubusercontent.com/NilLab-agi/Nyvero/main/additional/nyvero_demo.mp4)
 
 ## Architecture
 
@@ -62,13 +56,13 @@ nyvero/
 
 ## Features
 
-- **Thin agent loop** — the whole round trip is a few dozen readable lines.
+- **Thin agent loop**: the whole round trip is a few dozen readable lines.
 - **Streamed responses** in a rich terminal UI.
 - **One shared tool executor** used by the main agent and its subagents.
 - **Filesystem + shell tools** with permission tiers and workspace confinement.
-- **Sandboxed shell** — read-only root, writable workspace, no network. Uses
+- **Sandboxed shell**: read-only root, writable workspace, no network. Uses
   bubblewrap on Linux and the built-in seatbelt on macOS.
-- **Skills, todos and subagents** — reusable instructions, multi-step planning,
+- **Skills, todos and subagents**: reusable instructions, multi-step planning,
   and isolated read-only exploration.
 
 ## Install
@@ -98,12 +92,12 @@ cd Nyvero
 uv sync
 ```
 
-Shell commands run inside the built-in `sandbox-exec` (seatbelt) — nothing extra
+Shell commands run inside the built-in `sandbox-exec` (seatbelt); nothing extra
 to install.
 
 ### Windows
 
-Use **WSL2** and follow the Linux steps — that is the only way to get a
+Use **WSL2** and follow the Linux steps. That is the only way to get a
 sandboxed shell. Native Windows runs Nyvero too, but the shell is not
 kernel-confined (the permission rules still apply).
 
@@ -125,7 +119,7 @@ uv run nyvero
 
 | Variable | Default | Description |
 | --- | --- | --- |
-| `DEEPSEEK_API_KEY` | — | **Required.** Key for the model provider. |
+| `DEEPSEEK_API_KEY` | - | **Required.** Key for the model provider. |
 | `DEEPSEEK_BASE_URL` | `https://api.deepseek.com` | Any OpenAI-compatible endpoint. |
 | `MODEL` | `deepseek-flash` | Model identifier. |
 | `REASONING_EFFORT` | `high` | Reasoning-effort hint. |
@@ -147,7 +141,7 @@ Type `exit`, `quit`, or press <kbd>Ctrl</kbd>+<kbd>D</kbd> to leave.
 ## Tools
 
 Nyvero is model- and provider-agnostic: **any OpenAI-compatible provider and any
-model work** — OpenRouter, OpenAI, DeepSeek, Groq, Together, a local
+model work**: OpenRouter, OpenAI, DeepSeek, Groq, Together, a local
 Ollama/vLLM server, and so on. Point `DEEPSEEK_BASE_URL` at the provider and set
 `MODEL` to the model you want; nothing in the loop or the tools is tied to a
 specific vendor.
@@ -163,13 +157,13 @@ specific vendor.
 
 ## Safety
 
-- **Sandboxed shell** — read-only root, writable workspace, no network.
+- **Sandboxed shell**: read-only root, writable workspace, no network.
   bubblewrap on Linux, seatbelt on macOS. Where neither exists (native
   Windows) commands still run, gated by permissions; only the kernel layer is
   missing.
-- **Permissions** — reads run freely; writes and non-trivial shell commands ask;
+- **Permissions**: reads run freely; writes and non-trivial shell commands ask;
   destructive commands (`rm`, `sudo`, `curl`, `git push`, …) are denied.
-- **Workspace confinement** — file tools refuse paths outside the project.
+- **Workspace confinement**: file tools refuse paths outside the project.
 
 ## Development
 
